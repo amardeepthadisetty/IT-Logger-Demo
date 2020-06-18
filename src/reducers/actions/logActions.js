@@ -1,5 +1,6 @@
 import {
-    GET_LOGS, SET_LOADING, LOGS_ERROR, ADD_LOG, DELETE_LOG, SET_CURRENT, UPDATE_LOG, CLEAR_CURRENT
+    GET_LOGS, SET_LOADING, LOGS_ERROR, ADD_LOG, DELETE_LOG, SET_CURRENT, UPDATE_LOG, CLEAR_CURRENT,
+    SEARCH_LOGS
 } from './types';
 
 /* export const getLogs = () => {
@@ -35,7 +36,7 @@ export const getLogs = () => async dispatch => {
     } catch (error) {
         dispatch({
             type : LOGS_ERROR,
-            payload : error.response.data
+            payload : error.response.statusText
         });
     }
     
@@ -64,7 +65,7 @@ export const addLogs = ( log ) => async dispatch => {
     } catch (error) {
         dispatch({
             type: LOGS_ERROR,
-            payload: error.response.data
+            payload: error.response.statusText
         });
     }
     
@@ -89,7 +90,7 @@ export const deleteLogs = (id) => async dispatch => {
     } catch (error) {
         dispatch({
             type: LOGS_ERROR,
-            payload: error.response.data
+            payload: error.response.statusText
         });
     }
 }
@@ -107,7 +108,7 @@ export const setCurrent = log => async dispatch => {
     } catch (error) {
         dispatch({
             type: LOGS_ERROR,
-            payload: error.response.data
+            payload: error.response.statusText
         });
     }
 }
@@ -136,7 +137,31 @@ export const updateLog = log => async dispatch => {
     } catch (error) {
         dispatch({
             type: LOGS_ERROR,
-            payload: error.response.data
+            payload: error.response.statusText
+        });
+    }
+}
+
+//SEARCH_LOGS
+export const searchLog = search_term => async dispatch => {
+    try {
+
+        setLoading();
+        const res = await fetch(`/logs?q=${search_term}`, {
+            method: 'GET'
+        });
+
+        const data = await res.json();
+
+        dispatch({
+            type: SEARCH_LOGS,
+            payload: data
+        });
+
+    } catch (error) {
+        dispatch({
+            type: LOGS_ERROR,
+            payload: error.response.statusText
         });
     }
 }
